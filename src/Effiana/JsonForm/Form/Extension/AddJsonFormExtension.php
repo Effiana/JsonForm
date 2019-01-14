@@ -27,7 +27,7 @@ class AddJsonFormExtension extends AbstractTypeExtension
      *
      * @return array
      */
-    public function getExtendedTypes(): iterable
+    public static function getExtendedTypes(): iterable
     {
         return [FormType::class];
     }
