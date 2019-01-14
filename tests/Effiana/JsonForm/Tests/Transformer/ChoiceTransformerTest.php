@@ -9,14 +9,14 @@
  * file that was distributed with this source code.
  */
 
-namespace Limenius\Liform\Tests\Liform\Transformer;
+namespace Effiana\JsonForm\Tests\Liform\Transformer;
 
 use Symfony\Component\Form\Extension\Core\Type;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
-use Limenius\Liform\Transformer\CompoundTransformer;
-use Limenius\Liform\Transformer;
-use Limenius\Liform\Resolver;
-use Limenius\Liform\Tests\JsonFormTestCase;
+use Effiana\JsonForm\Transformer\CompoundTransformer;
+use Effiana\JsonForm\Transformer;
+use Effiana\JsonForm\Resolver;
+use Effiana\JsonForm\Tests\JsonFormTestCase;
 
 /**
  * @author Nacho Martín <nacho@limenius.com>

@@ -32,9 +32,9 @@ in the *installation chapter* of the Composer documentation.
 Serializing a form into JSON Schema:
 
 ```php
-use Limenius\Liform\Resolver;
-use Limenius\Liform\Liform;
-use Limenius\Liform\Liform\Transformer;
+use Effiana\JsonForm\Resolver;
+use Effiana\JsonForm\Liform;
+use Effiana\JsonForm\Liform\Transformer;
 
 $resolver = new Resolver();
 $resolver->setTransformer('text', Transformer\StringTransformer);
@@ -106,7 +106,7 @@ To do so, you can use the `setTransformer` method of the `Resolver` class. In th
 
 ```php
 
-use Limenius\Liform\Liform;
+use Effiana\JsonForm\Liform;
 
 $stringTransformer = $this->get('liform.transformer.string');
 
@@ -120,7 +120,7 @@ $liform = new Liform($resolver);
 This library provides a normalizer to serialize a `FormView` (you can create one with `$form->createView()`) into an array of initial values.
 
 ```php
-use Limenius\Liform\Serializer\Normalizer\FormViewNormalizer;
+use Effiana\JsonForm\Serializer\Normalizer\FormViewNormalizer;
 
 $encoders = array(new XmlEncoder(), new JsonEncoder());
 $normalizers = array(new FormViewNormalizer());
@@ -138,7 +138,7 @@ To obtain an array of initial values that match your json-schema.
 This library provides a normalizer to serialize forms with errors into an array. This part was shamelessly taken from [FOSRestBundle](https://github.com/FriendsOfSymfony/FOSRestBundle/blob/master/Serializer/Normalizer/FormErrorNormalizer.php). To use this feature copy the following code in your controller action:
 
 ```php
-use Limenius\Liform\Serializer\Normalizer\FormErrorNormalizer;
+use Effiana\JsonForm\Serializer\Normalizer\FormErrorNormalizer;
 
 $encoders = array(new XmlEncoder(), new JsonEncoder());
 $normalizers = array(new FormErrorNormalizer());

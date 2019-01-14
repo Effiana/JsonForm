@@ -9,9 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Limenius\Liform\Tests;
+namespace Effiana\JsonForm\Tests;
 
-use Limenius\Liform\Form\Extension\AddJsonFormExtension;
+use Effiana\JsonForm\Form\Extension\AddJsonFormExtension;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Form\Forms;
 use Symfony\Component\Translation\TranslatorInterface;

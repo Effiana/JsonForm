@@ -9,10 +9,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Limenius\Liform\Tests\Normalizer;
+namespace Effiana\JsonForm\Tests\Normalizer;
 
-use Limenius\Liform\Serializer\Normalizer\InitialValuesNormalizer;
-use Limenius\Liform\Tests\JsonFormTestCase;
+use Effiana\JsonForm\Serializer\Normalizer\InitialValuesNormalizer;
+use Effiana\JsonForm\Tests\JsonFormTestCase;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;

@@ -9,14 +9,14 @@
  * file that was distributed with this source code.
  */
 
-namespace Limenius\Liform\Tests\Liform\Transformer;
+namespace Effiana\JsonForm\Tests\Liform\Transformer;
 
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
-use Limenius\Liform\Transformer\CompoundTransformer;
-use Limenius\Liform\Transformer\StringTransformer;
-use Limenius\Liform\Resolver;
-use Limenius\Liform\Tests\JsonFormTestCase;
+use Effiana\JsonForm\Transformer\CompoundTransformer;
+use Effiana\JsonForm\Transformer\StringTransformer;
+use Effiana\JsonForm\Resolver;
+use Effiana\JsonForm\Tests\JsonFormTestCase;
 
 /**
  * @author Nacho Martín <nacho@limenius.com>
@@ -50,7 +50,7 @@ class CommonTransformerTest extends JsonFormTestCase
             ->add(
                 'firstName',
                 TextType::class,
-                ['liform' => ['description' => 'A word that references you in the hash of the world']]
+                ['jsonform' => ['description' => 'A word that references you in the hash of the world']]
             );
         $resolver = new Resolver();
         $resolver->setTransformer('text', new StringTransformer($this->translator));
@@ -89,7 +89,7 @@ class CommonTransformerTest extends JsonFormTestCase
             ->add(
                 'firstName',
                 TextType::class,
-                ['liform' => ['widget' => 'my widget']]
+                ['jsonform' => ['widget' => 'my widget']]
             );
         $resolver = new Resolver();
         $resolver->setTransformer('text', new StringTransformer($this->translator));

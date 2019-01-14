@@ -9,11 +9,11 @@
  * file that was distributed with this source code.
  */
 
-namespace Limenius\Liform\Tests;
+namespace Effiana\JsonForm\Tests;
 
-use Limenius\Liform\Resolver;
-use Limenius\Liform\Exception\TransformerException;
-use Limenius\Liform\Transformer\StringTransformer;
+use Effiana\JsonForm\Resolver;
+use Effiana\JsonForm\Exception\TransformerException;
+use Effiana\JsonForm\Transformer\StringTransformer;
 use Symfony\Component\Form\Test\TypeTestCase;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
@@ -32,7 +32,7 @@ class ResolverTest extends TypeTestCase
     }
 
     /**
-     * @expectedException \Limenius\Liform\Exception\TransformerException
+     * @expectedException \Effiana\JsonForm\Exception\TransformerException
      */
     public function testCannotResolve()
     {

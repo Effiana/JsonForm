@@ -9,14 +9,14 @@
  * file that was distributed with this source code.
  */
 
-namespace Limenius\Liform\Tests\Liform\Transformer;
+namespace Effiana\JsonForm\Tests\Liform\Transformer;
 
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
-use Limenius\Liform\Transformer\CompoundTransformer;
-use Limenius\Liform\Transformer\NumberTransformer;
-use Limenius\Liform\Resolver;
-use Limenius\Liform\Tests\JsonFormTestCase;
+use Effiana\JsonForm\Transformer\CompoundTransformer;
+use Effiana\JsonForm\Transformer\NumberTransformer;
+use Effiana\JsonForm\Resolver;
+use Effiana\JsonForm\Tests\JsonFormTestCase;
 
 /**
  * @author Nacho Martín <nacho@limenius.com>
@@ -31,7 +31,7 @@ class NumberTransformerTest extends JsonFormTestCase
             ->add(
                 'somefield',
                 NumberType::class,
-                ['liform' => ['widget' => 'widget']]
+                ['jsonform' => ['widget' => 'widget']]
             );
         $resolver = new Resolver();
         $resolver->setTransformer('number', new NumberTransformer($this->translator));
