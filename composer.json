@@ -1,26 +1,30 @@
 {
-    "name": "limenius/liform",
+    "name": "effiana/jsonform",
     "description": "Library to transform Symfony Forms into Json Schema",
     "type": "library",
     "license": "MIT",
     "authors": [
+        {
+            "name": "Dominik Labudzinski",
+            "email": "dominik@labudzinski.com"
+        },
         {
             "name": "Nacho Martín",
             "email": "nacho@limenius.com"
         }
     ],
     "autoload": {
-        "psr-4": { "Limenius\\Liform\\": "src/Limenius/Liform" }
+        "psr-4": { "Effiana\\JsonForm\\": "src/Effiana/JsonForm" }
     },
     "autoload-dev": {
         "psr-4": {
-            "Limenius\\Liform\\Tests\\": "tests/Limenius/Liform/Tests"
+            "Effiana\\JsonForm\\Tests\\": "tests/Effiana/JsonForm/Tests"
         }
     },
     "require": {
-      "symfony/form": "~2.8|~3.0|^4.0",
-      "symfony/translation": "~2.3|~3.0|^4.0",
-      "symfony/serializer": "~2.8|~3.0|^4.0"
+      "symfony/form": "^4.2",
+      "symfony/translation": "^4.2",
+      "symfony/serializer": "^4.2"
     },
     "require-dev": {
         "squizlabs/php_codesniffer": "^2.5",
