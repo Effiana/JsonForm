@@ -24,7 +24,7 @@ class FormUtil
      *
      * @return array
      */
-    public static function typeAncestry(FormInterface $form)
+    public static function typeAncestry(FormInterface $form): array
     {
         $types = [];
         self::typeAncestryForType($form->getConfig()->getType(), $types);
@@ -38,7 +38,7 @@ class FormUtil
      *
      * @return void
      */
-    public static function typeAncestryForType(ResolvedFormTypeInterface $formType = null, array &$types)
+    public static function typeAncestryForType(?ResolvedFormTypeInterface $formType, array &$types): void
     {
         if (!($formType instanceof ResolvedFormTypeInterface)) {
             return;
@@ -56,17 +56,17 @@ class FormUtil
      *
      * @return string|null the dataClass
      */
-    public static function findDataClass($formType)
+    public static function findDataClass($formType): ?string
     {
         if ($dataClass = $formType->getConfig()->getDataClass()) {
             return $dataClass;
-        } else {
-            if ($parent = $formType->getParent()) {
-                return self::findDataClass($parent);
-            } else {
-                return null;
-            }
         }
+
+        if ($parent = $formType->getParent()) {
+            return self::findDataClass($parent);
+        }
+
+        return null;
     }
 
     /**
@@ -77,7 +77,7 @@ class FormUtil
      */
     public static function isTypeInAncestry(FormInterface $form, $type)
     {
-        return in_array($type, self::typeAncestry($form));
+        return in_array($type, self::typeAncestry($form), true);
     }
 
     /**
@@ -85,7 +85,7 @@ class FormUtil
      *
      * @return string
      */
-    public static function type(FormInterface $form)
+    public static function type(FormInterface $form): string
     {
         return $form->getConfig()->getType()->getName();
     }
@@ -95,7 +95,7 @@ class FormUtil
      *
      * @return string
      */
-    public static function label(FormInterface $form)
+    public static function label(FormInterface $form): string
     {
         return $form->getConfig()->getOption('label', $form->getName());
     }
@@ -105,7 +105,7 @@ class FormUtil
      *
      * @return string
      */
-    public static function isCompound(FormInterface $form)
+    public static function isCompound(FormInterface $form): string
     {
         return $form->getConfig()->getOption('compound');
     }

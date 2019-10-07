@@ -13,6 +13,7 @@ namespace Effiana\JsonForm\Transformer;
 
 use Effiana\JsonForm\FormUtil;
 use Effiana\JsonForm\ResolverInterface;
+use Symfony\Component\Form\Event\PreSubmitEvent;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormTypeGuesserInterface;
 use Symfony\Component\Translation\TranslatorInterface;
@@ -44,42 +45,78 @@ class CompoundTransformer extends AbstractTransformer
     /**
      * {@inheritdoc}
      */
-    public function transform(FormInterface $form, array $extensions = [], $widget = null)
+    public function transform(FormInterface $form, array $extensions = [], $component = null): array
     {
-        $data = [];
-        $order = 1;
-        $required = [];
+        $schema = [];
 
         foreach ($form->all() as $name => $field) {
+            $options = $field->getConfig()->getOptions();
+            $jsonFormOptions = $options['jsonform'] ?? [];
+            $jsonFormOptions['column'] = $jsonFormOptions['column'] ?? 0;
+            $jsonFormOptions['tab'] = $jsonFormOptions['tab'] ?? 'main';
+            $jsonFormOptions['constraints'] = $jsonFormOptions['constraints'] ?? [];
             $transformerData = $this->resolver->resolve($field);
-            $transformedChild = $transformerData['transformer']->transform($field, $extensions, $transformerData['widget']);
-            $transformedChild['propertyOrder'] = $order;
-            $data[$name] = $transformedChild;
-            $order ++;
+            $transformedChild = $transformerData['transformer']->transform($field, $extensions, $transformerData['component']);
+//            $transformedChild['propertyOrder'] = $order;
 
-            if ($transformerData['transformer']->isRequired($field)) {
-                $required[] = $field->getName();
+            $transformedChild['name'] = $name;
+            if($jsonFormOptions['constraints']) {
+                $transformedChild['constraints'] = $jsonFormOptions['constraints'];
             }
+            $componentName = $transformedChild['component'] ?? $name;
+            unset($transformedChild['component']);
+
+            $transformedChild['required'] = $transformerData['transformer']->isRequired($field);
+            if(!array_key_exists($jsonFormOptions['column'], $schema)) {
+                $schema[$jsonFormOptions['column']] = [
+                    'column' => $jsonFormOptions['column']
+                ];
+            }
+
+            if(!array_key_exists($jsonFormOptions['tab'], $schema[$jsonFormOptions['column']])) {
+                $schema[$jsonFormOptions['column']][$jsonFormOptions['tab']] = [
+                    'tab' => $jsonFormOptions['tab']
+                ];
+            }
+            if(!array_key_exists($componentName, $schema[$jsonFormOptions['column']][$jsonFormOptions['tab']])) {
+                $schema[$jsonFormOptions['column']][$jsonFormOptions['tab']]['components'][$componentName] = [
+                    'component' => $componentName,
+                    'fields' => []
+                ];
+            }
+            $schema[$jsonFormOptions['column']][$jsonFormOptions['tab']]['components'][$componentName]['fields'][] = $transformedChild;
         }
-
-        $schema = [
-            'title' => $form->getConfig()->getOption('label'),
-            'type' => 'object',
-            'properties' => $data,
-        ];
-
-        if (!empty($required)) {
-            $schema['required'] = $required;
+        foreach ($schema as $key => $value) {
+            foreach ($value as $k => $v) {
+                if(isset($v['components'])) {
+                    $schema[$key][$k]['components'] = array_values($v['components']);
+                }
+            }
         }
 
         $innerType = $form->getConfig()->getType()->getInnerType();
 
-        $schema = $this->addCommonSpecs($form, $schema, $extensions, $widget);
-
+        $schema = $this->addCommonSpecs($form, $schema, $extensions, $component);
+        unset($schema['label']);
         if (method_exists($innerType, 'buildJsonForm')) {
             $schema = $innerType->buildJsonForm($form, $schema);
         }
+        $schema = array_values($schema);
+        $schema = array_filter($schema, static function($item) {
+            return is_array($item);
+        });
 
-        return $schema;
+        $schema = array_map(static function($item) {
+            if(array_key_exists('column', $item)) {
+                unset($item['column']);
+            }
+            if(is_array($item)) {
+                return array_values($item);
+            }
+        }, $schema);
+
+        return [
+            'data' => $schema
+        ];
     }
 }

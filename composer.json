@@ -22,26 +22,9 @@
         }
     },
     "require": {
-      "symfony/form": "^4.2",
-      "symfony/translation": "^4.2",
-      "symfony/serializer": "^4.2"
-    },
-    "require-dev": {
-        "squizlabs/php_codesniffer": "^2.5",
-        "escapestudios/symfony2-coding-standard": "^2.9",
-        "wimg/php-compatibility": "^7.0"
-    },
-    "scripts": {
-        "default-scripts": [
-            "rm -rf vendor/squizlabs/php_codesniffer/CodeSniffer/Standards/PHPCompatibility; cp -rp vendor/wimg/php-compatibility vendor/squizlabs/php_codesniffer/CodeSniffer/Standards/PHPCompatibility"
-        ],
-        "post-install-cmd": [
-            "@default-scripts"
-        ],
-        "post-update-cmd": [
-            "@default-scripts"
-        ],
-        "test": "phpunit",
-        "cs": "phpcs --standard=ruleset.xml -p"
+        "php": "^7.2",
+        "symfony/form": "^4.2",
+        "symfony/translation": "^4.2",
+        "symfony/serializer": "^4.2"
     }
 }

@@ -37,7 +37,7 @@ class AddJsonFormExtension extends AbstractTypeExtension
      *
      * @param OptionsResolver $resolver
      */
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefined(['jsonform']);
     }

@@ -15,7 +15,7 @@ use Effiana\JsonForm\Exception\TransformerException;
 use Effiana\JsonForm\ResolverInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormTypeGuesserInterface;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * @author Nacho Martín <nacho@limenius.com>
@@ -34,7 +34,7 @@ class ArrayTransformer extends AbstractTransformer
      */
     public function __construct(
         TranslatorInterface $translator,
-        FormTypeGuesserInterface $validatorGuesser = null,
+        ?FormTypeGuesserInterface $validatorGuesser,
         ResolverInterface $resolver
     ) {
         parent::__construct($translator, $validatorGuesser);
@@ -42,15 +42,18 @@ class ArrayTransformer extends AbstractTransformer
     }
 
     /**
-     * {@inheritdoc}
+     * @param FormInterface $form
+     * @param array $extensions
+     * @param null $component
+     * @return array
      */
-    public function transform(FormInterface $form, array $extensions = [], $widget = null)
+    public function transform(FormInterface $form, array $extensions = [], $component = null): array
     {
         $children = [];
 
         foreach ($form->all() as $name => $field) {
             $transformerData = $this->resolver->resolve($field);
-            $transformedChild = $transformerData['transformer']->transform($field, $extensions, $transformerData['widget']);
+            $transformedChild = $transformerData['transformer']->transform($field, $extensions, $transformerData['component']);
             $children[] = $transformedChild;
 
             if ($transformerData['transformer']->isRequired($field)) {
@@ -66,17 +69,16 @@ class ArrayTransformer extends AbstractTransformer
             }
 
             $transformerData = $this->resolver->resolve($entryType);
-            $children[] = $transformerData['transformer']->transform($entryType, $extensions, $transformerData['widget']);
-            $children[0]['title'] = 'prototype';
+            $children[] = $transformerData['transformer']->transform($entryType, $extensions, $transformerData['component']);
+            $children[0]['label'] = 'prototype';
         }
 
         $schema = [
-            'type' => 'array',
-            'title' => $form->getConfig()->getOption('label'),
+            'label' => $form->getConfig()->getOption('label'),
             'items' => $children[0],
         ];
 
-        $schema = $this->addCommonSpecs($form, $schema, $extensions, $widget);
+        $schema = $this->addCommonSpecs($form, $schema, $extensions, $component);
 
         return $schema;
     }

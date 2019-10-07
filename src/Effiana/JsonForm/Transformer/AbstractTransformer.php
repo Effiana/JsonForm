@@ -13,7 +13,7 @@ namespace Effiana\JsonForm\Transformer;
 
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormTypeGuesserInterface;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * @author Nacho Martín <nacho@limenius.com>
@@ -47,7 +47,7 @@ abstract class AbstractTransformer implements TransformerInterface
      *
      * @return array
      */
-    protected function applyExtensions(array $extensions, FormInterface $form, array $schema)
+    protected function applyExtensions(array $extensions, FormInterface $form, array $schema): array
     {
         $newSchema = $schema;
         foreach ($extensions as $extension) {
@@ -61,17 +61,16 @@ abstract class AbstractTransformer implements TransformerInterface
      * @param FormInterface        $form
      * @param array                $schema
      * @param ExtensionInterface[] $extensions
-     * @param string               $widget
+     * @param string               $component
      *
      * @return array
      */
-    protected function addCommonSpecs(FormInterface $form, array $schema, $extensions = [], $widget)
+    protected function addCommonSpecs(FormInterface $form, array $schema, $extensions = [], $component): array
     {
         $schema = $this->addLabel($form, $schema);
-        $schema = $this->addAttr($form, $schema);
         $schema = $this->addPattern($form, $schema);
         $schema = $this->addDescription($form, $schema);
-        $schema = $this->addWidget($form, $schema, $widget);
+        $schema = $this->addComponent($form, $schema, $component);
         $schema = $this->applyExtensions($extensions, $form, $schema);
 
         return $schema;
@@ -84,7 +83,7 @@ abstract class AbstractTransformer implements TransformerInterface
      *
      * @return array
      */
-    protected function addPattern(FormInterface $form, array $schema)
+    protected function addPattern(FormInterface $form, array $schema): array
     {
         if ($attr = $form->getConfig()->getOption('attr')) {
             if (isset($attr['pattern'])) {
@@ -101,13 +100,13 @@ abstract class AbstractTransformer implements TransformerInterface
      *
      * @return array
      */
-    protected function addLabel(FormInterface $form, array $schema)
+    protected function addLabel(FormInterface $form, array $schema): array
     {
         $translationDomain = $form->getConfig()->getOption('translation_domain');
         if ($label = $form->getConfig()->getOption('label')) {
-            $schema['title'] = $this->translator->trans($label, [], $translationDomain);
+            $schema['label'] = $this->translator->trans($label, [], $translationDomain);
         } else {
-            $schema['title'] = $this->translator->trans($form->getName(), [], $translationDomain);
+            $schema['label'] = $this->translator->trans($form->getName(), [], $translationDomain);
         }
 
         return $schema;
@@ -119,22 +118,7 @@ abstract class AbstractTransformer implements TransformerInterface
      *
      * @return array
      */
-    protected function addAttr(FormInterface $form, array $schema)
-    {
-        if ($attr = $form->getConfig()->getOption('attr')) {
-            $schema['attr'] = $attr;
-        }
-
-        return $schema;
-    }
-
-    /**
-     * @param FormInterface $form
-     * @param array         $schema
-     *
-     * @return array
-     */
-    protected function addDescription(FormInterface $form, array $schema)
+    protected function addDescription(FormInterface $form, array $schema): array
     {
         if ($jsonform = $form->getConfig()->getOption('jsonform')) {
             if (isset($jsonform['description']) && $description = $jsonform['description']) {
@@ -148,18 +132,19 @@ abstract class AbstractTransformer implements TransformerInterface
     /**
      * @param FormInterface $form
      * @param array         $schema
-     * @param mixed         $configWidget
+     * @param mixed         $configComponent
      *
      * @return array
      */
-    protected function addWidget(FormInterface $form, array $schema, $configWidget)
+    protected function addComponent(FormInterface $form, array $schema, $configComponent): array
     {
+
         if ($jsonform = $form->getConfig()->getOption('jsonform')) {
-            if (isset($jsonform['widget']) && $widget = $jsonform['widget']) {
-                $schema['widget'] = $widget;
+            if (isset($jsonform['component']) && $component = $jsonform['component']) {
+                $schema['component'] = $component;
             }
-        } elseif ($configWidget) {
-            $schema['widget'] = $configWidget;
+        } elseif ($configComponent) {
+            $schema['component'] = $configComponent;
         }
 
         return $schema;
@@ -170,7 +155,7 @@ abstract class AbstractTransformer implements TransformerInterface
      *
      * @return boolean
      */
-    protected function isRequired(FormInterface $form)
+    protected function isRequired(FormInterface $form): bool
     {
         return $form->getConfig()->getOption('required');
     }

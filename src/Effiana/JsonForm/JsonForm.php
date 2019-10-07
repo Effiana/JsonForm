@@ -43,8 +43,7 @@ class JsonForm implements JsonFormInterface
     public function transform(FormInterface $form)
     {
         $transformerData = $this->resolver->resolve($form);
-
-        return $transformerData['transformer']->transform($form, $this->extensions, $transformerData['widget']);
+        return $transformerData['transformer']->transform($form, $this->extensions, $transformerData['component']);
     }
 
     /**
