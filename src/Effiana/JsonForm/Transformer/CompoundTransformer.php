@@ -60,10 +60,10 @@ class CompoundTransformer extends AbstractTransformer
 //            $transformedChild['propertyOrder'] = $order;
 
             $transformedChild['name'] = $name;
-            if($jsonFormOptions['constraints']) {
+            if(!array_key_exists('constraints', $jsonFormOptions)) {
                 $transformedChild['constraints'] = $jsonFormOptions['constraints'];
             }
-            if($jsonFormOptions['mode']) {
+            if(!array_key_exists('mode', $jsonFormOptions)) {
                 $transformedChild['mode'] = $jsonFormOptions['mode'];
             }
             $componentName = $transformedChild['component'] ?? $name;
