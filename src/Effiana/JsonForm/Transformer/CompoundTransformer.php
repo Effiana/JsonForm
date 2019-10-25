@@ -56,6 +56,7 @@ class CompoundTransformer extends AbstractTransformer
             $jsonFormOptions['tab'] = $jsonFormOptions['tab'] ?? 'main';
             $jsonFormOptions['constraints'] = $jsonFormOptions['constraints'] ?? [];
             $transformerData = $this->resolver->resolve($field);
+
             $transformedChild = $transformerData['transformer']->transform($field, $extensions, $transformerData['component']);
 //            $transformedChild['propertyOrder'] = $order;
 
@@ -78,10 +79,11 @@ class CompoundTransformer extends AbstractTransformer
 
             if(!array_key_exists($jsonFormOptions['tab'], $schema[$jsonFormOptions['column']])) {
                 $schema[$jsonFormOptions['column']][$jsonFormOptions['tab']] = [
-                    'tab' => $jsonFormOptions['tab']
+                    'tab' => $jsonFormOptions['tab'],
+                    'components' => []
                 ];
             }
-            if(!array_key_exists($componentName, $schema[$jsonFormOptions['column']][$jsonFormOptions['tab']])) {
+            if(!array_key_exists($componentName, $schema[$jsonFormOptions['column']][$jsonFormOptions['tab']]['components'])) {
                 $schema[$jsonFormOptions['column']][$jsonFormOptions['tab']]['components'][$componentName] = [
                     'component' => $componentName,
                     'fields' => []
