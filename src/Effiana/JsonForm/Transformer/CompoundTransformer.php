@@ -63,6 +63,9 @@ class CompoundTransformer extends AbstractTransformer
             if($jsonFormOptions['constraints']) {
                 $transformedChild['constraints'] = $jsonFormOptions['constraints'];
             }
+            if($jsonFormOptions['mode']) {
+                $transformedChild['mode'] = $jsonFormOptions['mode'];
+            }
             $componentName = $transformedChild['component'] ?? $name;
             unset($transformedChild['component']);
 
