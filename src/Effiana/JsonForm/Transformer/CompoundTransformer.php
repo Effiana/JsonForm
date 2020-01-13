@@ -16,7 +16,7 @@ use Effiana\JsonForm\ResolverInterface;
 use Symfony\Component\Form\Event\PreSubmitEvent;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormTypeGuesserInterface;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * @author Nacho Martín <nacho@limenius.com>
