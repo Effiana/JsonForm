@@ -50,7 +50,7 @@ class JsonForm implements JsonFormInterface
     /**
      * {@inheritdoc}
      */
-    public function addExtension(ExtensionInterface $extension): self
+    public function addExtension(ExtensionInterface $extension): JsonFormInterface
     {
         $this->extensions[] = $extension;
 

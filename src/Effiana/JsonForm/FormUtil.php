@@ -106,7 +106,7 @@ class FormUtil
      *
      * @return string
      */
-    public static function isCompound(FormInterface $form): string
+    public static function isCompound(FormInterface $form): bool
     {
         return $form->getConfig()->getOption('compound');
     }
