@@ -8,6 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+declare(strict_types=1);
 
 namespace Effiana\JsonForm;
 
@@ -30,7 +31,7 @@ class Resolver implements ResolverInterface
      * @param TransformerInterface $transformer
      * @param string|null          $component
      */
-    public function setTransformer($formType, TransformerInterface $transformer, $component = null)
+    public function setTransformer($formType, TransformerInterface $transformer, $component = null): void
     {
         $this->transformers[$formType] = [
             'transformer' => $transformer,
@@ -41,13 +42,13 @@ class Resolver implements ResolverInterface
     /**
      * {@inheritdoc}
      */
-    public function resolve(FormInterface $form)
+    public function resolve(FormInterface $form): array
     {
         $types = FormUtil::typeAncestry($form);
 
         foreach ($types as $type) {
             if (isset($this->transformers[$type])) {
-                return $this->transformers[$type];
+                return (array)$this->transformers[$type];
             }
         }
 

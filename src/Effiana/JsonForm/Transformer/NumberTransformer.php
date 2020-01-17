@@ -8,6 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+declare(strict_types=1);
 
 namespace Effiana\JsonForm\Transformer;
 
@@ -21,7 +22,7 @@ class NumberTransformer extends AbstractTransformer
     /**
      * {@inheritdoc}
      */
-    public function transform(FormInterface $form, array $extensions = [], $component = null)
+    public function transform(FormInterface $form, array $extensions = [], $component = null): array
     {
         $schema = [];
         $schema = $this->addCommonSpecs($form, $schema, $extensions, $component);

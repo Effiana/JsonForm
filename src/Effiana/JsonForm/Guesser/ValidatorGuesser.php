@@ -8,6 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+declare(strict_types=1);
 
 namespace Effiana\JsonForm\Guesser;
 
@@ -24,7 +25,7 @@ class ValidatorGuesser extends ValidatorTypeGuesser
     /**
      * {@inheritdoc}
      */
-    public function guessMinLength($class, $property)
+    public function guessMinLength($class, $property): Guess
     {
         return $this->guess($class, $property, function (Constraint $constraint) {
             return $this->guessMinLengthForConstraint($constraint);

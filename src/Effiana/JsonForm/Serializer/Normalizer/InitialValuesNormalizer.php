@@ -8,6 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+declare(strict_types=1);
 
 namespace Effiana\JsonForm\Serializer\Normalizer;
 
@@ -26,7 +27,7 @@ class InitialValuesNormalizer implements NormalizerInterface
     /**
      * {@inheritdoc}
      */
-    public function normalize($form, $format = null, array $context = [])
+    public function normalize($form, string $format = null, array $context = [])
     {
         $formView = $form->createView();
 
@@ -36,22 +37,25 @@ class InitialValuesNormalizer implements NormalizerInterface
     /**
      * {@inheritdoc}
      */
-    public function supportsNormalization($data, $format = null)
+    public function supportsNormalization($data, string $format = null): bool
     {
         return $data instanceof Form;
     }
 
+    /**
+     * @param Form $form
+     * @param FormView $formView
+     * @return array|mixed|object|null
+     */
     private function getValues(Form $form, FormView $formView)
     {
         if (!empty($formView->children)) {
-            if (in_array('choice', FormUtil::typeAncestry($form)) &&
-                $formView->vars['expanded']
-            ) {
+            if ($formView->vars['expanded'] && in_array('choice', FormUtil::typeAncestry($form), true)) {
                 if ($formView->vars['multiple']) {
                     return $this->normalizeMultipleExpandedChoice($formView);
-                } else {
-                    return $this->normalizeExpandedChoice($formView);
                 }
+
+                return $this->normalizeExpandedChoice($formView);
             }
             // Force serialization as {} instead of []
             $data = (object) array();
@@ -70,21 +74,20 @@ class InitialValuesNormalizer implements NormalizerInterface
             }
 
             return $data;
-        } else {
-            // handle separatedly the case with checkboxes, so the result is
-            // true/false instead of 1/0
-            if (isset($formView->vars['checked'])) {
-                return $formView->vars['checked'];
-            }
-
-            return $formView->vars['value'];
         }
+
+        // handle separatedly the case with checkboxes, so the result is
+        // true/false instead of 1/0
+        return $formView->vars['checked'] ?? $formView->vars['value'];
     }
 
-
-    private function normalizeMultipleExpandedChoice($formView)
+    /**
+     * @param $formView
+     * @return array
+     */
+    private function normalizeMultipleExpandedChoice($formView): array
     {
-        $data = array();
+        $data = [];
         foreach ($formView->children as $name => $child) {
             if ($child->vars['checked']) {
                 $data[] = $child->vars['value'];
@@ -94,6 +97,10 @@ class InitialValuesNormalizer implements NormalizerInterface
         return $data;
     }
 
+    /**
+     * @param $formView
+     * @return |null
+     */
     private function normalizeExpandedChoice($formView)
     {
         foreach ($formView->children as $name => $child) {

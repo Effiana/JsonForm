@@ -8,13 +8,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+declare(strict_types=1);
 
 namespace Effiana\JsonForm\Serializer\Normalizer;
 
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Normalizes invalid Form instances.
@@ -39,10 +40,10 @@ class FormErrorNormalizer implements NormalizerInterface
     /**
      * {@inheritdoc}
      */
-    public function normalize($object, $format = null, array $context = [])
+    public function normalize($object, string $format = null, array $context = []): array
     {
         return [
-            'code' => isset($context['status_code']) ? $context['status_code'] : null,
+            'code' => $context['status_code'] ?? null,
             'message' => 'Validation Failed',
             'errors' => $this->convertFormToArray($object),
         ];
@@ -51,7 +52,7 @@ class FormErrorNormalizer implements NormalizerInterface
     /**
      * {@inheritdoc}
      */
-    public function supportsNormalization($data, $format = null)
+    public function supportsNormalization($data, string $format = null): bool
     {
         return $data instanceof FormInterface && $data->isSubmitted() && !$data->isValid();
     }
@@ -63,7 +64,7 @@ class FormErrorNormalizer implements NormalizerInterface
      *
      * @return array
      */
-    private function convertFormToArray(FormInterface $data)
+    private function convertFormToArray(FormInterface $data): array
     {
         $form = $errors = [];
         foreach ($data->getErrors() as $error) {
@@ -93,10 +94,13 @@ class FormErrorNormalizer implements NormalizerInterface
      *
      * @return string
      */
-    private function getErrorMessage(FormError $error)
+    private function getErrorMessage(FormError $error): string
     {
         if (null !== $error->getMessagePluralization()) {
-            return $this->translator->transChoice($error->getMessageTemplate(), $error->getMessagePluralization(), $error->getMessageParameters(), 'validators');
+            return $this->translator->trans($error->getMessageTemplate(), array_merge([
+                '%count%' => $error->getMessagePluralization()
+            ], $error->getMessageParameters()
+            ), 'validators');
         }
 
         return $this->translator->trans($error->getMessageTemplate(), $error->getMessageParameters(), 'validators');

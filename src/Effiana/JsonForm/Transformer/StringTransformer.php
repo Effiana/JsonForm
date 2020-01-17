@@ -8,6 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+declare(strict_types=1);
 
 namespace Effiana\JsonForm\Transformer;
 
@@ -23,7 +24,7 @@ class StringTransformer extends AbstractTransformer
     /**
      * {@inheritdoc}
      */
-    public function transform(FormInterface $form, array $extensions = [], $component = null)
+    public function transform(FormInterface $form, array $extensions = [], $component = null): array
     {
         $schema = [];
         $schema = $this->addCommonSpecs($form, $schema, $extensions, $component);
@@ -39,12 +40,10 @@ class StringTransformer extends AbstractTransformer
      *
      * @return array
      */
-    protected function addMaxLength(FormInterface $form, array $schema)
+    protected function addMaxLength(FormInterface $form, array $schema): array
     {
-        if ($attr = $form->getConfig()->getOption('attr')) {
-            if (isset($attr['maxlength'])) {
-                $schema['maxLength'] = $attr['maxlength'];
-            }
+        if (($attr = $form->getConfig()->getOption('attr')) && isset($attr['maxlength'])) {
+            $schema['maxLength'] = $attr['maxlength'];
         }
 
         return $schema;
@@ -56,14 +55,12 @@ class StringTransformer extends AbstractTransformer
      *
      * @return array
      */
-    protected function addMinLength(FormInterface $form, array $schema)
+    protected function addMinLength(FormInterface $form, array $schema): array
     {
-        if ($attr = $form->getConfig()->getOption('attr')) {
-            if (isset($attr['minlength'])) {
-                $schema['minLength'] = $attr['minlength'];
-                
-                return $schema;
-            }
+        if (($attr = $form->getConfig()->getOption('attr')) && isset($attr['minlength'])) {
+            $schema['minLength'] = $attr['minlength'];
+
+            return $schema;
         }
         
         if (null === $this->validatorGuesser) {

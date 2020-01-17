@@ -8,6 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+declare(strict_types=1);
 
 namespace Effiana\JsonForm;
 
@@ -75,7 +76,7 @@ class FormUtil
      *
      * @return boolean
      */
-    public static function isTypeInAncestry(FormInterface $form, $type)
+    public static function isTypeInAncestry(FormInterface $form, $type): bool
     {
         return in_array($type, self::typeAncestry($form), true);
     }

@@ -8,6 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+declare(strict_types=1);
 
 namespace Effiana\JsonForm;
 
@@ -24,12 +25,12 @@ interface JsonFormInterface
      *
      * @return array
      */
-    public function transform(FormInterface $form);
+    public function transform(FormInterface $form): array;
 
     /**
      * @param ExtensionInterface $extension
      *
      * @return JsonFormInterface
      */
-    public function addExtension(ExtensionInterface $extension);
+    public function addExtension(ExtensionInterface $extension): self;
 }
