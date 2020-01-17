@@ -28,14 +28,15 @@ class ChoiceTransformer extends AbstractTransformer
      */
     public function transform(FormInterface $form, array $extensions = [], $component = null): array
     {
+        $jsonform = $form->getConfig()->getOption('jsonform');
         $isGrouped = false;
         $formView = $form->createView();
         $choices = [];
         $multipleChoices = [];
+
         foreach ($formView->vars['choices'] as $groupName => $choiceView) {
             if ($choiceView instanceof ChoiceGroupView) {
                 foreach ($choiceView->choices as $choiceItem) {
-
                     if(!array_key_exists($groupName, $multipleChoices)) {
                         $multipleChoices[$groupName] = [
                             'group' => $groupName,
@@ -44,13 +45,15 @@ class ChoiceTransformer extends AbstractTransformer
                     }
                     $multipleChoices[$groupName]['values'][] = [
                         'value' => $this->guessType($choiceItem->value),
-                        'label' => $this->translator->trans($choiceItem->label)
+                        'label' => $this->translator->trans($choiceItem->label),
+                        'selected' => (isset($jsonform['default']) && $this->guessType($jsonform['default']) === $this->guessType($choiceItem->value))
                     ];
                 }
             } else {
                 $choices[] = [
                     'value' => $this->guessType($choiceView->value),
-                    'label' => $this->translator->trans($choiceView->label)
+                    'label' => $this->translator->trans($choiceView->label),
+                    'selected' => (isset($jsonform['default']) && $this->guessType($jsonform['default']) === $this->guessType($choiceView->value))
                 ];
             }
         }
