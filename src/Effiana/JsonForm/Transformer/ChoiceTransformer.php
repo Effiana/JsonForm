@@ -47,14 +47,16 @@ class ChoiceTransformer extends AbstractTransformer
                     $multipleChoices[$groupName]['values'][] = [
                         'value' => $this->guessType($choiceItem->value),
                         'label' => $this->translator->trans($choiceItem->label, [], $translationDomain),
-                        'selected' => (isset($jsonform['default']) && $this->guessType($jsonform['default']) === $this->guessType($choiceItem->value))
+                        'selected' => (isset($jsonform['default']) && $this->guessType($jsonform['default']) === $this->guessType($choiceItem->value)),
                     ];
                 }
             } else {
+                $mode = ($choiceView->data instanceof ChoiceTransformerInterface) ? $choiceView->data->isRadio() : false;
                 $choices[] = [
                     'value' => $this->guessType($choiceView->value),
                     'label' => $this->translator->trans($choiceView->label, [], $translationDomain),
-                    'selected' => (isset($jsonform['default']) && $this->guessType($jsonform['default']) === $this->guessType($choiceView->value))
+                    'selected' => (isset($jsonform['default']) && $this->guessType($jsonform['default']) === $this->guessType($choiceView->value)),
+                    'type' => $mode === true ? 'radio' : 'checkbox'
                 ];
             }
         }
