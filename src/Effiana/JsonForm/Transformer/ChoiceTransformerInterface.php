@@ -15,7 +15,6 @@ namespace Effiana\JsonForm\Transformer {
 
     interface ChoiceTransformerInterface
     {
-        public function isRadio(): bool;
+        public function isSingle(): bool;
     }
-
 }
